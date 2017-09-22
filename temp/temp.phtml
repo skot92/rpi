@@ -1,0 +1,80 @@
+<html>
+      <head>
+           <title>Temp and humidity</title>
+           <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+           <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" />
+           <script src="https://cdn.datatables.net/1.10.15/js/jquery.dataTables.min.js"></script>
+           <script src="https://cdn.datatables.net/1.10.15/js/dataTables.bootstrap.min.js"></script>
+
+           <link rel="stylesheet" href="https://cdn.datatables.net/1.10.15/css/dataTables.bootstrap.min.css" />
+           <script type="text/javascript" src="https://canvasjs.com/assets/script/canvasjs.min.js"></script>
+
+          
+		        <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.6.0/Chart.min.js"></script>
+                <script type="text/javascript" src="linegraph.js"></script>
+            
+        <link rel="stylesheet" href="https://kendo.cdn.telerik.com/2017.2.621/styles/kendo.common-material.min.css" />
+        <link rel="stylesheet" href="https://kendo.cdn.telerik.com/2017.2.621/styles/kendo.material.min.css" />
+        <link rel="stylesheet" href="https://kendo.cdn.telerik.com/2017.2.621/styles/kendo.material.mobile.min.css" />
+
+
+        <script src="https://kendo.cdn.telerik.com/2017.2.621/js/kendo.all.min.js"></script>
+                  
+
+
+
+
+  <style>
+			.chart-container {
+				width: 1280px;
+				height: auto;
+			}
+
+		</style>
+
+      </head>
+
+
+      <body>  
+
+
+
+
+
+      <div align="center" class="chart-container">
+                <canvas id="mycanvas"></canvas>
+		</div>
+
+           <div class="container">
+                <h3 align="center">Temp and humidity</h3>
+                <br />
+                <div class="table-responsive">
+                     <table id="data" class="table table-striped table-bordered">
+                          <thead>
+                               <tr>
+                                    <td>Date</td>
+                                    <td>Temp</td>
+                                    <td>Humidity</td>
+
+                               </tr>
+                          </thead>
+                          <tbody>
+
+                          </tbody>
+                          
+                     </table>
+                </div>
+           </div>
+      </body>
+</html>
+<script>
+ $(document).ready(function(){
+      $('#data').DataTable({
+
+        "processing": true,
+       //  "serverSide": true,
+        "ajax": 'server_processing.php'
+
+      });
+ });
+</script>
