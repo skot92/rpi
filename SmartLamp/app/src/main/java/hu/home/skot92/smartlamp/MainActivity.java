@@ -11,6 +11,7 @@ import android.content.ComponentName;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
+import android.os.AsyncTask;
 import android.os.Bundle;
 
 import android.support.v4.app.FragmentActivity;
@@ -25,6 +26,10 @@ import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
 import android.widget.ToggleButton;
+
+import org.springframework.http.converter.StringHttpMessageConverter;
+import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
+import org.springframework.web.client.RestTemplate;
 
 import java.util.Calendar;
 
@@ -46,6 +51,9 @@ public class MainActivity extends AppCompatActivity   {
     TimePicker alarmTimePicker;
     PendingIntent pendingIntent;
     AlarmManager alarmManager;
+    ToggleButton toggleButton;
+    Pi pi;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,46 +62,16 @@ public class MainActivity extends AppCompatActivity   {
         setContentView(R.layout.activity_main);
         alarmTimePicker = (TimePicker) findViewById(R.id.timePicker);
         alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
+        pi = new Pi();
 
-        AudioDispatcher dispatcher = AudioDispatcherFactory.fromDefaultMicrophone(22050,1024,0);
-        final RemoteViews remoteViews = new RemoteViews(getPackageName(),
-                R.layout.simple_widget);
+        toggleButton = (ToggleButton) findViewById(R.id.onoff);
+    }
 
-        double threshold = 8;
-        double sensitivity = 20;
+    public void onOff(View view) {
 
-        PercussionOnsetDetector mPercussionDetector = new PercussionOnsetDetector(22050, 1024,
-                new OnsetHandler() {
-
-                    @Override
-                    public void handleOnset(double time, double salience) {
-                        Log.d("sound", "Clap detect" );
-                        socketClient = new SocketClient();
-                        String number =  socketClient.read_message_button();
-                        if(number.equals("on")) {
-                            socketClient.send_message("on");
-                            remoteViews.setTextViewText(R.id.actionButton, "on");
-
-                        }
-                        else {
-                            socketClient.send_message("off");
-                            remoteViews.setTextViewText(R.id.actionButton, "off");
-                        }
-                        AppWidgetManager appWidgetManager = AppWidgetManager.getInstance(getApplicationContext());
-                        int[] ids = appWidgetManager.getAppWidgetIds(new ComponentName(getApplicationContext(), SimpleWidgetProvider.class));
-
-                        Intent intent = new Intent(getApplicationContext(),SimpleWidgetProvider.class);
-                        intent.setAction(AppWidgetManager.ACTION_APPWIDGET_UPDATE);
-
-                        intent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_IDS,ids);
-                        sendBroadcast(intent);
-
-                    }
-                }, sensitivity, threshold);
-
-        //dispatcher.addAudioProcessor(mPercussionDetector);
-        //new Thread(dispatcher,"Audio Dispatcher").start();
-
+        Log.d("mainactivity",pi.getLampStatus());
+        pi.switchLamp();
+        Log.d("mainactivity",pi.getLampStatus());
 
 
     }

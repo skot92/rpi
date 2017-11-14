@@ -21,16 +21,13 @@ public class SimpleWidgetProvider extends AppWidgetProvider {
     public void onUpdate(Context context, AppWidgetManager appWidgetManager, int[] appWidgetIds) {
         final int count = appWidgetIds.length;
 
-        String message;
-        String ip;
-        SocketClient socketClient;
-
-        socketClient = new SocketClient();
+        Pi pi;
+        pi = new Pi();
 
 
         for (int i = 0; i < count; i++) {
             int widgetId = appWidgetIds[i];
-            String number =  socketClient.read_message_button();
+            String number =  pi.getLampStatus();//socketClient.read_message_button();
 
             RemoteViews remoteViews = new RemoteViews(context.getPackageName(),
                     R.layout.simple_widget);
@@ -39,14 +36,8 @@ public class SimpleWidgetProvider extends AppWidgetProvider {
 
             remoteViews.setTextViewText(R.id.actionButton, number);
 
+            pi.switchLamp();
 
-            if(number.equals("on")) {
-                socketClient.send_message("on");
-
-            }
-            else {
-                socketClient.send_message("off");
-            }
 
 
 
